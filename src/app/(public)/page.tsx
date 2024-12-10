@@ -17,9 +17,12 @@ function Homepage() {
           take care of you. We are open 24/7 to take care of you. We are here to
           serve you.
         </p>
-        <div className="flex gap-5">
+        <div className="flex gap-5 flex-wrap">
           <Button>
             <Link href="/services">View Services</Link>
+          </Button>
+          <Button>
+            <Link href="/appointment-confirmation">Download Appointment</Link>
           </Button>
           <Button type="primary">
             <Link href="/book-appointment">Book an Appointment</Link>

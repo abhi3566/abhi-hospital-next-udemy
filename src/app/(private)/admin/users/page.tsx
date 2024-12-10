@@ -2,11 +2,21 @@ import PageTitle from "@/components/page-title";
 import { IUser } from "@/interfaces";
 import { getAllUsers } from "@/server-actions/users";
 import { Alert } from "antd";
-import React from "react";
+import React, { Suspense } from "react";
 import UsersTable from "./_components/users-table";
+import SpinnerForServerComponents from "@/components/spinner-for-server-components";
+import FilterUsers from "./_components/filter-users";
 
-async function UsersPage() {
-  const { success, data } = await getAllUsers();
+interface UsersPageProps {
+  searchParams: {
+    name: string;
+    email: string;
+    isApproved: boolean;
+  };
+}
+
+async function UsersPage({ searchParams }: UsersPageProps) {
+  const { success, data } = await getAllUsers(searchParams);
   if (!success) {
     return (
       <Alert
@@ -19,12 +29,18 @@ async function UsersPage() {
   const users: IUser[] = data;
 
   return (
-    <div className="p-5">
+    <div className="p-5 flex flex-col gap-5">
       <PageTitle title="Users" />
-
+      <FilterUsers />
       <UsersTable users={users} />
     </div>
   );
 }
 
-export default UsersPage;
+export default function Page(props: any) {
+  return (
+    <Suspense fallback={<SpinnerForServerComponents />}>
+      <UsersPage {...props} />
+    </Suspense>
+  );
+}
